@@ -2,6 +2,9 @@
 
 Disadober 是一个用于 Clash Verge 代理工具的管理工具，主要提供了 Adobe 域名屏蔽和配置备份还原功能。
 
+## 开箱即用
+下载Releases中的exe运行即可。
+
 ## 功能特性
 
 - **Adobe 域名屏蔽**：自动下载和应用 Adobe 域名屏蔽规则，防止 Adobe 软件的联网验证
