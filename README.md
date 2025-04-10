@@ -11,11 +11,11 @@ Disadober 是一个用于 Clash Verge 代理工具的管理工具，主要提供
 
 ## 截图展示
 
-![主界面](image/1.png)
+![主界面](image/3.png)
 
 ![Adobe屏蔽设置](image/2.png)
 
-![备份还原](image/3.png)
+![备份还原](image/1.png)
 
 ## 安装
 
