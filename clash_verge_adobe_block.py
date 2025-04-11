@@ -134,7 +134,7 @@ function main(config) {
   ];
   
   // Adobe屏蔽规则 - 固定规则
-  adobe_rules.push("DOMAIN-SUFFIX,*.adobe.io,REJECT");
+  adobe_rules.push("DOMAIN-SUFFIX,adobe.io,REJECT");
   adobe_rules.push("DOMAIN-SUFFIX,adobestats.io,REJECT");
   
   // Adobe屏蔽规则 - 从屏蔽列表生成
