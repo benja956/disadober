@@ -117,7 +117,7 @@ def restore_backup(backup_path, auto_backup=True):
             return False, f"备份文件不存在: {backup_path}"
         
         # 获取原始文件名和目标路径
-        original_name = get_original_name(backup_path.name)
+        original_name = get_original_name(backup_path.name) + ".js"
         destination = backup_path.parent / original_name
         
         # 备份当前文件
