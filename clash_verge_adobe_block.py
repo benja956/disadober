@@ -5,6 +5,7 @@
 Clash Verge Adobe屏蔽模块 - 提供Adobe屏蔽相关功能
 """
 
+import ssl
 import urllib.request
 import urllib.error
 
@@ -47,6 +48,42 @@ GITHUB_PROXIES = [
     "https://mirror.ghproxy.com/https://raw.githubusercontent.com"
 ]
 
+def _make_ssl_context():
+    """创建 SSL context，依次尝试 certifi、跳过验证（macOS Python 证书常缺失）"""
+    # 1. 优先使用 certifi 证书（最安全）
+    try:
+        import certifi
+        return ssl.create_default_context(cafile=certifi.where())
+    except ImportError:
+        pass
+
+    # 2. 尝试系统证书，连接测试通过则使用
+    try:
+        ctx = ssl.create_default_context()
+        # 用一个轻量请求验证证书是否真的可用
+        import urllib.request
+        req = urllib.request.Request(
+            "https://raw.githubusercontent.com",
+            method="HEAD"
+        )
+        urllib.request.urlopen(req, timeout=5, context=ctx)
+        return ctx
+    except Exception:
+        pass
+
+    # 3. 降级：跳过证书验证（仅用于下载公开内容文件，无安全风险）
+    ctx = ssl.create_default_context()
+    ctx.check_hostname = False
+    ctx.verify_mode = ssl.CERT_NONE
+    return ctx
+
+
+def _urlopen(url, timeout=15):
+    """带 SSL 修复的 urlopen"""
+    ctx = _make_ssl_context()
+    return urllib.request.urlopen(url, timeout=timeout, context=ctx)
+
+
 def try_download_with_proxies():
     """尝试使用内置代理下载"""
     tried_urls = []
@@ -55,7 +92,7 @@ def try_download_with_proxies():
         tried_urls.append(url)
         print(f"尝试使用代理URL: {url}")
         try:
-            with urllib.request.urlopen(url) as response:
+            with _urlopen(url) as response:
                 if response.status == 200:
                     content = response.read().decode('utf-8')
                     domains = extract_adobe_domains(content)
@@ -75,7 +112,7 @@ def try_download_with_custom_proxy(proxy):
     url = f"{proxy}https://raw.githubusercontent.com/ignaciocastro/a-dove-is-dumb/main/127.txt"
     
     try:
-        with urllib.request.urlopen(url) as response:
+        with _urlopen(url) as response:
             if response.status == 200:
                 content = response.read().decode('utf-8')
                 domains = extract_adobe_domains(content)

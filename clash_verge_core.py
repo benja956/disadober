@@ -19,7 +19,7 @@ def get_clash_verge_directory():
     if system == "Windows":
         return home / "AppData" / "Roaming" / "io.github.clash-verge-rev.clash-verge-rev"
     elif system == "Darwin":  # macOS
-        return home / "Library" / "Application Support" / "io.github.clash-verge-rev"
+        return home / "Library" / "Application Support" / "io.github.clash-verge-rev.clash-verge-rev"
     elif system == "Linux":
         return home / ".config" / "clash-verge"
     else:
